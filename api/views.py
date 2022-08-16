@@ -36,4 +36,6 @@ class CreateRoomView(APIView):
                             votes_to_skip=votes_to_skip)
                 room.save()
 
-            return Response(RoomSerializer(room).data, status=status.HTTP_201)
+            return Response(RoomSerializer(room).data, status=status.HTTP_201_CREATED)
+
+        return Response({'Bad Request': 'Invalid data...'}, status=status.HTTP_400_BAD_REQUEST)
