@@ -6,12 +6,12 @@ import TextField from "@material-ui/core/TextField";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import { Link } from "react-router-dom";
+import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Radio from "@material-ui/core/Radio";
 
 export default class CreateRoomPage extends Component {
-  default_votes = 2;
+  defaultVotes = 2;
 
   constructor(props) {
     super(props);
@@ -21,8 +21,8 @@ export default class CreateRoomPage extends Component {
     };
 
     this.handleRoomButtonPressed = this.handleRoomButtonPressed.bind(this);
-    this.handleGuestCanPauseChange = this.handleGuestCanPauseChange.bind(this);
     this.handleVotesChange = this.handleVotesChange.bind(this);
+    this.handleGuestCanPauseChange = this.handleGuestCanPauseChange.bind(this);
   }
 
   handleVotesChange(e) {
@@ -56,7 +56,7 @@ export default class CreateRoomPage extends Component {
       <Grid container spacing={1}>
         <Grid item xs={12} align="center">
           <Typography component="h4" variant="h4">
-            Create a Room
+            Create A Room
           </Typography>
         </Grid>
         <Grid item xs={12} align="center">
@@ -107,7 +107,7 @@ export default class CreateRoomPage extends Component {
             variant="contained"
             onClick={this.handleRoomButtonPressed}
           >
-            Create Room
+            Create A Room
           </Button>
         </Grid>
         <Grid item xs={12} align="center">

@@ -8,7 +8,6 @@ import {
   Route,
   Link,
   Redirect,
-  element,
 } from "react-router-dom";
 
 export default class HomePage extends Component {
@@ -20,9 +19,11 @@ export default class HomePage extends Component {
     return (
       <Router>
         <Switch>
-          <Route exact path="/" component={<p>This is the HomePage</p>} />
-          <Route exact path="/join" component={JoinRoomPage} />
-          <Route exact path="/create" component={CreateRoomPage} />
+          <Route exact path="/">
+            <p>This is the HomePage</p>
+          </Route>
+          <Route path="/join" component={JoinRoomPage} />
+          <Route path="/create" component={CreateRoomPage} />
           <Route path="/room/:roomCode" component={Room} />
         </Switch>
       </Router>
