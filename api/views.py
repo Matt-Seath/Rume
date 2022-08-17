@@ -13,6 +13,25 @@ class RoomView(generics.ListAPIView):
     serializer_class = RoomSerializer
 
 
+class JoinRoom(APIView):
+    lookup_url_kwarg = 'code'
+
+    def post(self, request, format=None):
+        if not self.request.session.exists(self.request.session.session_key):
+            self.request.session.create()
+
+        code = request.data.get(self.lookup_url_kwarg)
+        if code != None:
+            room_result = Room.objects.filter(code=code)
+            if len(room_result) > 0:
+                room = room_result[0]
+                self.request.session['room_code'] = code
+
+                return Response({'message': 'Joined Room'}, status=status.HTTP_200_OK)
+            return Response({'Bad Request': 'Invalid Room Code'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'Bad Request': 'Invalid post data, did not find a code key'}, status=status.HTTP_400_BAD_REQUEST)
+
+
 class GetRoom(APIView):
     serializer_class = RoomSerializer
     lookup_url_kwarg = 'code'
@@ -24,9 +43,9 @@ class GetRoom(APIView):
             if len(room) > 0:
                 data = RoomSerializer(room[0]).data
                 data['is_host'] = self.request.session.session_key == room[0].host
+
                 return Response(data, status=status.HTTP_200_OK)
             return Response({'Room Not Found': 'Invalid Room Code.'}, status=status.HTTP_404_NOT_FOUND)
-
         return Response({'Bad Resquest': 'Code Parameter Not Found In Request'}, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -48,11 +67,13 @@ class CreateRoomView(APIView):
                 room.guest_can_pause = guest_can_pause
                 room.votes_to_skip = votes_to_skip
                 room.save(update_fields=['guest_can_pause', 'votes_to_skip'])
+                self.request.session['room_code'] = room.code
+                return Response(RoomSerializer(room).data, status=status.HTTP_200_OK)
             else:
                 room = Room(host=host, guest_can_pause=guest_can_pause,
                             votes_to_skip=votes_to_skip)
                 room.save()
-
-            return Response(RoomSerializer(room).data, status=status.HTTP_201_CREATED)
+                self.request.session['room_code'] = room.code
+                return Response(RoomSerializer(room).data, status=status.HTTP_201_CREATED)
 
         return Response({'Bad Request': 'Invalid data...'}, status=status.HTTP_400_BAD_REQUEST)

@@ -6,7 +6,7 @@ __pycache__
 db.sqlite3
 media
 
-# Node
+# Frontend Modules
 node_modules/
 
 # Backup files # 
